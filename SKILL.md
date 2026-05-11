@@ -1,40 +1,40 @@
 ---
 name: skill-library
-description: Find and activate on-demand skills from the cold library at C:\Users\w\.agents\skill-libraries without loading all 170 skills into context. Use when a rare tool, domain workflow, framework guide, media workflow, or agent operation skill may exist but is not active. Search first — do not assume a skill is unavailable.
+description: Find and activate on-demand skills from the cold library without loading them into context. Use when a rare tool, domain workflow, framework guide, media workflow, or agent operation skill may exist but is not active. Search first — do not assume a skill is unavailable.
 ---
 
 # Skill Library
 
-Use this skill to discover cold-library skills without loading all 170 on-demand skills into Claude's context at once.
+Search and activate skills from the cold library on-demand, without loading every rarely-used skill into context.
 
 ## Locations
 
-- Active shared skills: `C:\Users\w\.agents\skills`
-- Claude skill junctions: `C:\Users\w\.claude\skills`
-- Cold libraries: `C:\Users\w\.agents\skill-libraries`
+- Active skills: `~/.agents/skills`
+- Cold libraries: `~/.agents/skill-libraries`
+- This skill's scripts: `~/.agents/skills/skill-library/scripts/`
 
 ## Workflow
 
-0. If the catalog looks stale after archive changes, rebuild it:
+1. Search the catalog before assuming a rare tool or knowledge skill is unavailable:
    ```powershell
-   C:\Users\w\.agents\skills\skill-library\scripts\rebuild-catalog.ps1
-   ```
-1. Search the catalog before saying a rare tool or knowledge skill is unavailable:
-   ```powershell
-   C:\Users\w\.agents\skills\skill-library\scripts\search-library.ps1 -Query "<keyword>"
+   ~/.agents/skills/skill-library/scripts/search-library.ps1 -Query "<keyword>"
    ```
 2. Inspect promising matches:
    ```powershell
-   C:\Users\w\.agents\skills\skill-library\scripts\inspect-skill.ps1 -Name "<skill-name>"
+   ~/.agents/skills/skill-library/scripts/inspect-skill.ps1 -Name "<skill-name>"
    ```
-3. Ask the user before activating any archived skill.
+3. Ask the user before activating any skill.
 4. Activate only after explicit approval:
    ```powershell
-   C:\Users\w\.agents\skills\skill-library\scripts\activate-skill.ps1 -Name "<skill-name>" -ConfirmActivate
+   ~/.agents/skills/skill-library/scripts/activate-skill.ps1 -Name "<skill-name>" -ConfirmActivate
    ```
-5. If a restored skill is no longer needed, deactivate it after explicit approval:
+5. Deactivate when no longer needed:
    ```powershell
-   C:\Users\w\.agents\skills\skill-library\scripts\deactivate-skill.ps1 -Name "<skill-name>" -ConfirmDeactivate
+   ~/.agents/skills/skill-library/scripts/deactivate-skill.ps1 -Name "<skill-name>" -ConfirmDeactivate
+   ```
+6. If the catalog is stale after moving skills, rebuild it:
+   ```powershell
+   ~/.agents/skills/skill-library/scripts/rebuild-catalog.ps1
    ```
 
 ## Categories
@@ -44,11 +44,10 @@ Use this skill to discover cold-library skills without loading all 170 on-demand
 - `dev-frameworks`: language, framework, database, deployment, and testing stacks.
 - `industry-domain`: vertical industry, compliance, finance, logistics, healthcare, and operations.
 - `media-content`: writing, SEO, slides, video, animation, and content workflows.
-- `agent-ops`: ECC, autonomous agent, evaluation, memory, rules, and orchestration workflows.
+- `agent-ops`: autonomous agent, evaluation, memory, rules, and orchestration workflows.
 
 ## Guardrails
 
-- Do not link archived library skills directly into `.claude\skills`.
-- Do not place archived skill bodies under `.agents\skills\skill-library`.
-- Do not touch `.codex\skills` unless the user explicitly asks.
-- Treat activation as a configuration change: ask first, then restore one skill at a time.
+- Activate one skill at a time, with user approval.
+- Do not link cold-library skills directly into any auto-loaded skill directory without asking.
+- Treat activation as a configuration change, not a file operation.
